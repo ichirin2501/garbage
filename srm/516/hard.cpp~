@@ -1,0 +1,50 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+using namespace std;
+
+class NetworkXMessageRecovery{
+public:
+    string recover(vector <string> messages){
+        string ret;
+
+        // 最初にてきとーに連結させておく
+        set<char> sc;
+        for(int i=0; i<messages.size(); i++){
+            for(int j=0; j<messages[i].size(); j++){
+                sc.insert(messages[i][j]);
+            }
+        }
+        set<char>::iterator it;
+        for(it=sc.begin(); it!=sc.end(); it++){
+            ret += *it;
+        }
+
+        cout << ret << endl;
+
+
+        for(;;){
+            bool f = false;
+            
+            for(int i=0; i<messages.size(); i++){
+                for(int j=1; j<messages[i].size(); j++){
+                    int p = ret.find(messages[i][j-1]);
+                    int q = ret.find(messages[i][j]);
+                    if( q < p ){
+                        printf("p=%d, q=%d\n", p, q);
+                        cout << ret << endl;
+                        ret.insert(p+1, messages[i][j]);
+                        ret.erase(ret.begin()+q);
+                        cout << ret << endl;
+                    }
+                }
+            }
+
+            if( !f ) break;
+        }
+        return ret;
+    }
+};
+
+
