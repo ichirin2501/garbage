@@ -1,0 +1,33 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <cstdio>
+#include <map>
+using namespace std;
+
+
+
+class CuttingGrass{
+public:
+    vector<pair<int,int> > vp;
+    int dp[55][55];
+
+    int theMin(vector <int> init, vector <int> grow, int H){
+        int i;
+        
+        for(i=0; i<init.size(); i++) vp.push_back( make_pair(grow[i], init[i]) );
+        sort(vp.begin(), vp.end());
+
+        
+    }
+
+    bool solve(){
+        
+    }
+};
+
+
+int main(){
+    CuttingGrass C;
+    return 0;
+}

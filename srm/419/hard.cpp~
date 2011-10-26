@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstdio>
+using namespace std;
+
+bool edge[210][210];
+
+class CactusCount{
+public:
+    vector<string> split(vector<string>& _e){
+        int i,j,base;
+        vector<string> ret;
+
+        for(i=0; i<_e.size(); i++){
+            base = 0;
+            for(j=0; j<_e[i].length(); j++){
+                if( _e[i][j]==',' ){
+                    ret.push_back( _e[i].substr(base, j-base) );
+                    base = j + 1;
+                }
+            }
+        }
+        return ret;
+    }
+
+    int countCacti(int n, vector <string> _e){
+        int i;
+
+        vector<string> sub = split(_e);
+        // debug
+        for(i=0; i<sub.size(); i++){
+            int a,b;
+            cout << sub[i] << endl;
+            
+            //sscanf(sub[i].c_str(), "%d %d",  &a, &b);
+
+            //cout << a << " " << b << endl;
+        }
+
+        return 0;
+    }
+};
