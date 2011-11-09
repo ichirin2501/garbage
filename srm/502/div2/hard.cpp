@@ -48,3 +48,36 @@ int main(){
 
     return 0;
 }
+
+
+
+/*
+const long long mod = 1000000007LL;
+long long dp[1010][50];
+
+class TheCowDivTwo{
+public:
+  int find(int N, int K);
+};
+
+int TheCowDivTwo::find(int N, int K){
+  dp[0][0] = 1;
+  REP(i,1,N+1){
+    for(int k=K; k>=0; k--){
+      for(int j=0; j<N; j++){
+	dp[(j+i)%N][k+1] += dp[j][k];
+	dp[(j+i)%N][k+1] %= mod;
+      }
+    }
+#if DEB
+    rep(i,N+1){
+      rep(j,K+1){
+	printf("dp[%d][%d] = %lld\n",i,j,dp[i][j]);
+      }
+    }
+    puts("");
+#endif
+  }
+  return (int)dp[0][K];
+}
+ */

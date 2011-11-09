@@ -24,39 +24,38 @@ using namespace std;
 
 class SquaredSubsets{
 public:
-    bool isinside(int n, int x, int y, int px, int py){
-        return (x<=px && px<=x+n) && (y<=py && py<=y+n);
+    bool isinside(int n, double x, double y, int px, int py){
+        return ( x <= px && px <= x+n &&
+                 y <= py && py <= y+n );
     }
 
     long long countSubsets(int n, vector <int> x, vector <int> y){
-        vector<int> tx, ty;
-        set<long long> S;
-        int i,j,k;
+        int i,j,k,l,u;
+        int N = x.size();
+        set<long long> st;
+        double dx[] = {0, 0.5, -n, -n-0.5};
+        double dy[] = {0, 0.5, -n, -n-0.5};
 
-        rep(i,x.size()){
-            tx.push_back(x[i]); tx.push_back(x[i]-n);
-            ty.push_back(y[i]); ty.push_back(y[i]-n);
-        }
-
-        int m = tx.size();
-
-        rep(i,m) rep(j,m){
-            long long b = 0;
-            rep(k,x.size()){
-                if( isinside(n, tx[i], ty[j], x[k], y[k]) ){
-                    b |= 1LL << k;
+        rep(i,N){
+            rep(j,N){
+                rep(k,4){
+                    rep(l,4){
+                        double tx = x[i] + dx[k];
+                        double ty = y[j] + dy[l];
+                        long long b = 0;
+                        rep(u,N){
+                            if( isinside(n, tx, ty, x[u], y[u]) ){
+                                b |= (1LL<<u);
+                            }
+                        }
+                        if( b ) st.insert(b);
+                    }
                 }
+                
             }
-            S.insert(b);
         }
-        
-#if DEB
-        foreach(it, S){
-            cout << *it << endl;
-        }
-#endif
 
-        return (long long)S.size();
+        return (long long)st.size();
     }
 };
 
