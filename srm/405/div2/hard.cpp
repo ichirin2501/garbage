@@ -20,6 +20,72 @@ using namespace std;
 #define rall(x) x.rbegin(), x.rend()
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
 
+
+// 復習
+int used[110]; // [文字] = index
+string ans;
+
+class IdealString{
+public:
+    void solve(int idx, int al, int remain, int len, int length){
+        int i;
+        string res;
+
+        if( len == length ){
+            res = string(length, '#');
+            string tmp;
+            for(i=0; i<al; i++){
+                res[used[i]] = 'A' + i;
+                tmp += string(used[i], 'A'+i);
+            }
+
+            int k = 0;
+            rep(i,length) if( res[i] == '#' ){
+                res[i] = tmp[k++];
+            }
+            if( ans == "" || ans > res ) ans = res;
+        }
+
+        for(i=idx; i<=idx+remain && len+i+1<=length; i++){
+            used[al] = i;
+            solve(i+1, al+1, remain+(i+1)-1-(i-idx), len+(i+1), length);
+        }
+    }
+
+    string construct(int length){
+        ans = "";
+        solve(0, 0, 0, 0, length);
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 char used[120];
 
 class IdealString{
@@ -92,6 +158,7 @@ int main(){
     cout << I.construct(14) << endl;
     return 0;
 }
+*/
 
 
 

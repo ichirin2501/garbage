@@ -21,7 +21,63 @@ using namespace std;
 #define rall(x) x.rbegin(), x.rend()
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
 
+typedef long long ll;
+// 復習がてら
+class PerfectSequences{
+public:
+    string fixIt(vector <int> seq){
+        int i,j, n = seq.size();
 
+        if( n == 1 ) return "Yes";
+
+        sort(all(seq));
+        rep(i,n){
+            ll kake = 1, sum = 0;
+            rep(j,n) if( i != j ) {
+                kake *= seq[j];
+                sum += seq[j];
+                if( kake > sum+1 || kake > 50000000000LL ) break;
+            }
+            if( j == n ){
+                // kake * x == sum + x
+                // (kake - 1) * x == sum
+                if( sum == 0 && seq[i] != 0 ) return "Yes";
+                if( kake-1 > 0 && sum%(kake-1) == 0 && sum/(kake-1) != seq[i] ){
+                    return "Yes";
+                }
+            }
+        }
+
+        return "No";
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 class PerfectSequences{
 public:
     string fixIt(vector<int> seq){
@@ -53,6 +109,7 @@ public:
         return "No";
     }
 };
+*/
 
 int main(){
     PerfectSequences P;

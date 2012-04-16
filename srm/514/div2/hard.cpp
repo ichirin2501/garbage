@@ -21,6 +21,76 @@ using namespace std;
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
 
 
+// 復習3度目？
+typedef long long ll;
+const ll inf = 1000000000000010LL;
+ll sum[110];
+
+class MagicalGirlLevelThreeDivTwo{
+public:
+    bool isone(const vector<string>& first, int n, int K, ll idx){
+        int j;
+        if( n < K ) return (first[n][idx] == '1');
+
+        for(j=0; n-j*K-1 >= 0; j++){
+            if( sum[n-j*K-1] > idx ) return isone(first, n-j*K-1, K, idx);
+            idx -= sum[n-j*K-1];
+        }
+
+        //
+        puts("error"); exit(0);
+    }
+
+    int theCount(vector <string> first, int n, long long lo, long long hi){
+        int i,j, K = first.size();
+
+        rep(i,K) sum[i] = first[i].length();
+        REP(i,K,n+1){
+            for(j=0; i-j*K-1 >= 0; j++){
+                sum[i] += sum[i-j*K-1];
+                if( sum[i] > inf ) break;
+            }
+        }
+
+        int res = 0;
+        for(ll u = lo; u <= hi; u++){
+            if( isone(first, n, K, u) ) res++;
+        }
+
+        return res;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 typedef long long ll;
 
 ll len[110];
@@ -67,20 +137,7 @@ public:
         return ret;
     }
 };
-
-
-int main(){
-    MagicalGirlLevelThreeDivTwo M;
-    const char *s[] = {"101", "01"};
-    vector<string> first;
-    int i;
-    for(i=0; i<sizeof(s)/sizeof(s[0]); i++) first.push_back(string(s[i]));
-    cout << M.theCount(first, 4, 2, 5) << endl;
-
-    return 0;
-}
-
-
+*/
 
 
 

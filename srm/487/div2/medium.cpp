@@ -21,6 +21,34 @@ using namespace std;
 #define rall(x) x.rbegin(), x.rend()
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
 
+
+// ver2
+int dp[55];
+
+class BunnyComputer{
+public:
+    int getMaximum(vector <int> preference, int k){
+        int i,j;
+        int n = preference.size();
+        int res = 0;
+
+        for(i=0; i<=k; i++){
+            if( i+k+1 >= n ) break;
+            for(j=i+k+1; j<n; j+=k+1){
+                dp[j] = max((j-2*(k+1) < 0 ? 0 : dp[j-2*(k+1)]) + preference[j] + preference[j-(k+1)],
+                            (j-2*(k+1) < 0 ? 0 : -preference[j-2*(k+1)]) + dp[j-(k+1)] + preference[j]);
+                dp[j] = max(dp[j], dp[j-(k+1)]);
+            }
+            res += dp[j-(k+1)];
+        }
+
+        return res;
+    }
+};
+
+
+/*
+// ver1
 int dp[64][64];
 
 class BunnyComputer{
@@ -49,7 +77,7 @@ public:
         return res;
     }
 };
-
+*/
 
 int main(){
     int d[] = { 3, 1, 4, 1, 5, 9, 2, 6 };

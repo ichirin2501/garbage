@@ -20,6 +20,69 @@ using namespace std;
 #define rall(x) x.rbegin(), x.rend()
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
 
+/*
+  復習
+  
+ */
+map<vector<int>, double> mvd;
+
+class RandomSort{
+public:
+    bool isok(const vector<int>& permutation){
+        int i, n = permutation.size();
+        rep(i,n) if( permutation[i] != i+1 ) return false;
+        return true;
+    }
+    double getExpected(vector<int> permutation){
+
+        if( isok(permutation) ) return 0.0;
+        if( mvd.count(permutation) ) return mvd[permutation];
+
+        double res = 0.0;
+        int i, j, n = permutation.size();
+        int cnt = 0;
+
+        rep(i,n){
+            REP(j,i+1,n){
+                if( permutation[i] > permutation[j] ){
+                    swap(permutation[i], permutation[j]);
+                    res += getExpected(permutation);
+                    swap(permutation[i], permutation[j]);
+                    cnt++;
+                }
+            }
+        }
+
+        return mvd[permutation] = res/(double)cnt + 1.0;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 map<vector<int>, double> memo;
 
 class RandomSort{
@@ -61,3 +124,4 @@ public:
 int main(){
     return 0;
 }
+*/

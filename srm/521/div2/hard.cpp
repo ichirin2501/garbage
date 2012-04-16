@@ -21,7 +21,70 @@ using namespace std;
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
+#define EPS 1e-9
 
+
+typedef long long ll;
+
+class SquaredSubsets{
+public:
+    bool isinside(int n, double x, double y, int p, int q){
+        return (x-EPS <= p && p <= x+n+EPS && y-EPS <= q && q <= y+n+EPS);
+    }
+
+    long long countSubsets(int n, vector <int> x, vector <int> y){
+        int i,j,a,b,k,u,m = x.size();
+        vector<double> d;
+        set<ll> sl;
+
+        d.push_back(0); d.push_back(0.5); d.push_back(-n); d.push_back(-n-0.5);
+
+        rep(i,m){
+            rep(j,m){
+                rep(a,d.size()){
+                    rep(b,d.size()){
+                        double tx = x[i] + d[a];
+                        double ty = y[j] + d[b];
+                        ll S = 0;
+                        rep(u,m) if( isinside(n,tx,ty,x[u],y[u]) ) S |= 1LL<<u;
+                        if( S != 0 ) sl.insert(S);
+                    }
+                }
+            }
+        }
+        
+        return (ll)sl.size();
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 class SquaredSubsets{
 public:
     bool isinside(int n, double x, double y, int px, int py){
@@ -77,4 +140,5 @@ int main(){
 
     return 0;
 }
+*/
 

@@ -25,101 +25,95 @@ using namespace std;
 // YET_SYSTEM_TEST
 
 typedef long long ll;
+char buf[55];
+ll dp[55][55];
 
-bool used[44];
-char word[22];
-map<pair<long long, pair<int,int> >, long long> dp;
-
+// ooooo xxxxx ooooo xxxxx ooooo xxxxx ooooo xxxxx
+// ooooooooooooooooooooxxxxxxxxxxxxxxxxxxxx
 class SPartition{
 public:
-    ll calc(const string& s, int idx, ll S, int a, int b){
-        int i,j;
-        int n = s.length();
-        ll res = 0;
-        pair<long long, pair<int,int> > plii = make_pair(S,make_pair(a,b));
+    string str;
 
-        if( idx == n/2 ){
-            //printf("a=%d, b=%d\n",a,b);
-            return 1LL;
+    ll solve(int idx, int xid, int yid){
+        ll res = 0;
+
+        if( dp[xid][yid] != -1 ) return dp[xid][yid];
+        if( idx == str.length() ) return 1LL;
+        
+        if( xid < str.length()/2 && str[idx] == buf[xid] ){
+            res += solve(idx + 1, xid + 1, yid);
+        }
+        if( yid < str.length()/2 && str[idx] == buf[yid] ){
+            res += solve(idx + 1, xid, yid + 1);
         }
 
-        if( dp.count(plii) == 1 ) return dp[plii];
+        return dp[xid][yid] = res;
+    }
 
-        REP(i,a,n){
-            if( used[i] || word[idx] != s[i] ) continue;
-            REP(j,b,n){
-                if( used[j] || word[idx] != s[j] || i == j ) continue;
-                used[i] = used[j] = true;
-                res += calc(s, idx+1, S|(1LL<<i)|(1LL<<j), i+1, j+1);
-                used[i] = used[j] = false;
+    ll backtrack(int idx, int cnt, int no, int nx){
+        int i,j;
+        ll res = 0;
+
+        if( no == 0 && nx == 0 ){
+            buf[cnt] = 0;
+            memset(dp, -1, sizeof(dp));
+            return solve(0, 0, 0);
+        }
+
+        // oを取る
+        for(i=idx; i<str.length(); i++){
+            if( str[i] == 'o' ){
+                buf[cnt] = 'o';
+                res += backtrack(i + 1, cnt + 1, no - 1, nx);
+                break;
             }
         }
 
-        return dp[plii] = res;
-    }
-
-    ll solve(const string& s, int idx, int to, int tx){
-        ll res = 0;
-        int i,j,k;
-        int n = s.length();
-
-        if( to == 0 && tx == 0 ){
-            dp.clear();
-            memset(used, false, sizeof(used));
-            //puts(word);
-            res = calc(s,0,0LL,0,0);
-            //cout << res << endl;
+        for(i=idx; i<str.length(); i++){
+            if( str[i] == 'x' ){
+                buf[cnt] = 'x';
+                res += backtrack(i + 1, cnt + 1, no, nx - 1);
+                break;
+            }
         }
-
-        if( to > 0 ){
-            word[idx] = 'o';
-            res += solve(s, idx+1, to-1, tx);
-        }
-
-        if( tx > 0 ){
-            word[idx] = 'x';
-            res += solve(s, idx+1, to, tx-1);
-        }
+        cout << "res = " << res << endl;
 
         return res;
     }
 
     long long getCount(string s){
-        int i;
-        int n = s.length();
-        int tx = 0, to = 0;
+        int i,j, n = s.length();
+        int no = 0, nx = 0;
+        str = s;
 
-        rep(i,n) if( s[i] == 'o' ) to++;
-        tx = n - to;
-        if( to%2 || tx%2 ) return 0;
-
-        return solve(s, 0, to/2, tx/2);
+        rep(i,n) if( s[i] == 'o' ) no++; else nx++;
+        if( no % 2 || nx % 2 ) return 0LL;
+        
+        return backtrack(0, 0, no/2, nx/2);
     }
 };
 
-
-/*
-偶数の長さnの文字列が与えられる。
-文字は'o', 'x'の2種類で構成されている。
-n/2の部分文字列X,Yを作ったとき、
-同じ文字列になるパターン数を求める。
-（2つは区別する）
-
-
-DPだけど解けなかった。
-文字列の並び自体は多くないだろうとは考えてたけど、
-ある文字列を決定しちゃうのかー、なるほど。
-決定してしまえば、パターン数は高速に求められる。
- */
-
-
 int main(){
-    int i,j;
-    string s = "xoxxox";
-
     SPartition S;
 
-    //cout << S.getCount("xoxxox") << endl;
-    cout << S.getCount("oooooooooooooooooo") << endl;
+    cout << S.getCount("oxox") << endl;
+    cout << S.getCount("oooxxx") << endl;
+    cout << S.getCount("xoxxox") << endl;
+    cout << S.getCount("xo") << endl;
+    cout << S.getCount("ooooxoox") << endl;
+    cout << S.getCount("ooxxoxox") << endl;
     return 0;
- }
+}
+
+
+/*
+  最初に、同じ部分文字列が生成できる文字列を求める。
+  生成する文字列において、同じ文字列は生成しない
+  え、つまりどういうことｗ
+  str[idx] = 必ずXかYに属する
+  str[0] が X
+  str[1] が Y
+  のとき、X[0] == Y[0] でなければならない
+
+  あれ、順序を意識して書いたら、同じ文字列も生成されてるじゃん。なにやってんの
+ */

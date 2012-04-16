@@ -22,6 +22,96 @@ using namespace std;
 #define rall(x) x.rbegin(), x.rend()
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
 
+
+// 復習2
+
+/*
+  10^6 までで最大でも126個しかラッキー数は存在しない
+  個数を求めた後、貪欲に選択すればいい
+ */
+vector<int> lucky;
+const int inf = 1<<20;
+int dp[1000010];
+
+class TheSumOfLuckyNumbers{
+public:
+
+    void make_lucky(int n, int N){
+        if( n <= N ){
+            if( n > 0 ) lucky.push_back(n);
+            make_lucky(10 * n + 4, N);
+            make_lucky(10 * n + 7, N);
+        }
+    }
+
+    int dfs(int n){
+        int i, res = inf;
+
+        if( n == 0 ) return 0;
+        if( dp[n] ) return dp[n];
+
+        for(i=lucky.size()-1; i>=0; i--){
+            if( n >= lucky[i] ){
+                res = min(res, dfs(n - lucky[i]) + 1);
+            }
+        }
+        return dp[n] = res;
+    }
+
+    vector<int> sum(int n){
+        int i,j,k;
+
+        if( n < 4 ) return vector<int>();
+
+        make_lucky(0,n);
+        sort(all(lucky));
+
+        int cnt = dfs(n);
+        if( cnt == inf ) return vector<int>();
+
+        // 貪欲に数字の小さいほうから取っていく
+        vector<int> res;
+        while( n > 0 ){
+            rep(i,lucky.size()){
+                if( dp[n - lucky[i]] == cnt - 1 ){
+                    res.push_back(lucky[i]);
+                    cnt--;
+                    n -= lucky[i];
+                    break;
+                }
+            }
+        }
+        
+        sort(all(res));
+        return res;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 vector<int> lucknum;
 int dp[1000010];
 
@@ -81,7 +171,7 @@ int main(){
 
     return 0;
 }
-
+*/
 
 
 
