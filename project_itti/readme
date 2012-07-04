@@ -1,2 +1,39 @@
-$g++ main.cpp -lcurses
+人柱版です。使用する際は自己責任でお願いします。
+
+動作確認を行った環境
+Fedora14 32bit kernel 2.6.35.14-103.fc14.i686 
+
+ncursesが必須
+$ g++ main.cpp -lcurses -o itti
+$ ./itti filename
+
+操作方法
+1.normalモード(初期モード)
+[h,j,k,l]	: [左下上右]へ移動(矢印キーでも移動可)
+Ctrl-d		: PageDown
+Ctrl-u		: PageUp
+a		: カーソルが1文字進んでinsertモードに変更
+i		: カーソルがそのままでinsertモードに変更
+Del		: 1文字(1byte)削除
+u		: Undo
+Ctrl-r		: Redo
+:		: コマンドモードに派生
+
+
+2.commandモード(normarlモードから派生)
+q!		: 保存せずに終了
+w!		: 上書き保存(一時ファイルに書き込まれて、終了時に上書きされる)
+wq!		: 上書き保存して終了
+addressG	: アドレスジャンプ(e.x: 0x500G, アドレス0x500にジャンプ)
+
+
+3.insertモード
+矢印キー	: 各方向へ移動
+Esc		: normarlモードに戻る
+BackSpace	: 1文字(1byte)削除
+Del		: 1文字(1byte)削除
+[0-9a-f]	: 1byte挿入
+
+
+
 
