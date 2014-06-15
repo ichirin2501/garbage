@@ -23,41 +23,33 @@ using namespace std;
 #define rall(x) x.rbegin(), x.rend()
 #define foreach(it,x) for(typeof(x.begin()) it=x.begin(); it!=x.end(); it++)
 
-// cheat
 class PrinceXToastbook{
 public:
+    double calcProbability(int cnt, int idx, const vector<int>& prerequisite) {
+        if (cnt > prerequisite.size()) return 0.0;
+        if (prerequisite[idx] == -1)   return 1.0 / cnt;
+        return calcProbability(cnt + 1, prerequisite[idx], prerequisite) * 1.0 / cnt;
+    }
     double eat(vector <int> prerequisite){
-        int i,j, n = prerequisite.size();
-        double res = 0.0;
-        bool used[55];
-        
-        rep(i,n){
-            double p = 1.0;
-            int k = 1;
-            memset(used, false, sizeof(used));
-
-            for(j = i; j != -1; j = prerequisite[j]){
-                if( used[j] ){
-                    p = 0.0; break;
-                }
-
-                p /= (double)k;
-                k++;
-                used[j] = true;
-            }
-            res += p;
+        double res = 0;
+        for (int i=0; i<prerequisite.size(); ++i) {
+            res += 1.0 * calcProbability(1, i, prerequisite);
         }
-
         return res;
     }
 };
 
 /*
-  食べられるパンの個数　の　期待値を求める問題。
-  食べられるパンの個数 = X とすると、
-  X = X1 + X2 + .. + Xn
-  Xaはa番目のパンを食べたかどうか 0 or 1
-  E[X] = E[X1 + X2 + .. + Xn] = E[X1] + E[X2] + .. + E[Xn]
-  インディケータ変数だから、確率の和になる
-  
+  期待値の線形性を使う
+  ある知識Xを得るためには知識Yが必要、知識Yを得るためには知識Zが必要〜
+  という確率は、
+  YよりZが先になる確率=1/2 (ZY)
+  この状態だと
+  ・Zより先
+  ・ZとYの間
+  ・Yより後
+  の3カ所の状態がありえる。よって、Yより後になる確率は1/3なので、
+  ZYXの確率は 1/2 * 1/3 = 1/6
+  無関係な知識iに関しては無視することが出来るので、
+  関係のある状態に対して知識aがどの位置になるかだけを考えれば良い
  */
