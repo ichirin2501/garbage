@@ -25,10 +25,10 @@ using namespace std;
 
 class RemovingDigits {
 public:
-    bool isPossibleTopDigit(int idx, string& remNumber, map<char,int>& remDigits) {
+    bool isPossibleTopDigit(int idx, const string& remNumber, const map<char,int>& remDigits) {
         int numCount[10] = {};
         for (char i='0'; i<='9'; ++i) {
-            numCount[i - '0'] = remDigits[i];
+            numCount[i - '0'] = remDigits.at(i);
         }
         for (int i=0; i<idx; ++i) {
             if (numCount[remNumber[i] - '0'] <= 0) return false;
@@ -42,13 +42,13 @@ public:
         }
         return remCnt > numCount[ remNumber[idx] - '0' ];
     }
-    bool _isAllUsed(map<char,int>& s) {
+    bool _isAllUsed(const map<char,int>& s) {
         for (char c='0'; c<='9'; ++c) {
-            if (s[c] > 0) return false;
+            if (s.at(c) > 0) return false;
         }
         return true;
     }
-    int findIndexOfGoodTopDigit(string& remNumber, map<char,int>& remDigits) {
+    int findIndexOfGoodTopDigit(const string& remNumber, const map<char,int>& remDigits) {
         for (char c='9'; c >= '0'; --c) {
             for (int i=0; i < (int)remNumber.length(); ++i) {
                 if (remNumber[i] != c) continue;
