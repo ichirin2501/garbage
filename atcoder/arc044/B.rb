@@ -1,22 +1,13 @@
 $m = 10 ** 9 + 7
 n = gets.to_i
 dists = gets.split.map(&:to_i)
-groups = Array.new(n, 0)
+groups = Array.new(dists.max + 1, 0)
 
 dists.each do |d|
   groups[d] += 1
 end
 
-if dists[0] != 0 || groups[0] != 1 then
-  puts 0
-  exit
-end
-
-zero = (1 .. dists.max).each.select do |i|
-  groups[i] == 0
-end
-
-if ! zero.empty? then
+if dists[0] != 0 || groups[0] != 1 || groups.include?(0) then
   puts 0
   exit
 end
