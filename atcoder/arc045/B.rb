@@ -1,49 +1,26 @@
-require 'pp'
+N, M = gets.split.map(&:to_i)
+st = M.times.map{ gets.split.map(&:to_i) }
+mem = Array.new(N + 2, 0)
 
-N, M = gets.chomp('').split(" ").map{ |x| x.to_i }
+st.each do |(s,t)|
+  mem[s] += 1
+  mem[t + 1] -= 1
+end
 
-S = Array.new(M)
-T = Array.new(M)
-mem = Array.new(N + 10, 0)
-h = Hash.new()
-M.times { |i|
-  s,t = gets.chomp('').split(" ").map { |x| x.to_i }
-  S[i] = s
-  T[i] = t
-  mem[s] += 1;
-  mem[t + 1] -= 1;
-  h[t] ||= []
-  h[t].push(i)
-}
-
-for i in 1..N+1 do
+(1..N+1).each do |i|
   mem[i] += mem[i - 1]
 end
 
-s = 1
-f = 1
-ans = Array.new;
-
-for i in 1..N+1 do
-  if mem[i] > 1 then
-    if f == 0 then
-      f = 1
-      s = i
-    end
-    if h.has_key?(i) then
-     h[i].each { |idx|
-        if s <= S[idx] then
-          ans.push(idx)
-        end
-      }
-    end
-  else 
-    f = 0
+(1..N+1).each do |i|
+  if mem[i] != 1 then
+    mem[i] = 0
   end
+  mem[i] += mem[i - 1]
 end
 
-ans.sort!
-p ans.length
-ans.each { |idx|
-  p idx + 1
-}
+ans = (1..M).each.select do |i|
+  mem[st[i - 1].first - 1] == mem[st[i - 1].last]
+end
+
+puts ans.length
+puts ans
